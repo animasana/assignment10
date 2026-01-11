@@ -196,7 +196,7 @@ if user_input:
                     1. Use tools to gather information. Do NOT rely on prior knowledge.
                     2. Use wikipedia_search first in Wikipedia.
                     3. Use duckduckgo_search in DuckDuckGo.
-                    4. If duckduckgo_search found a url, Scrape at most ONE website.
+                    4. If duckduckgo_search found a url, Scrape at most TWO website.
                     5. Do NOT repeat the same search query.
                     6. After completing research, respond with the final report directly.
                     7. Do NOT call any tool after the report.                    
