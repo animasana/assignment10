@@ -183,7 +183,7 @@ if user_input:
         response = openai.responses.create(
             model=model,
             input=messages,
-        )
+        )        
     else:
         with st.spinner("Waiting a response..."):
             SYSTEM_PROMPT = {
