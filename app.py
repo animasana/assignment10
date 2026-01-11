@@ -223,7 +223,7 @@ if user_input:
                 ]
                 if tool_calls:
                     with st.expander("🔧 Tool calls"):
-                        st.markdown(
+                        st.write(
                             [
                                 {
                                     "tool": call.name,
