@@ -170,7 +170,6 @@ def build_messages_from_history():
 st.chat_message("ai").write("I'm ready! Ask away!")
 paint_history()
 user_input = st.chat_input("Ask something...")
-response = None
 if user_input:
     send_user_message(user_input)    
     response = None
@@ -281,17 +280,17 @@ if user_input:
                     tools=tools,        
                 )
     
-for item in response.output:
-    if isinstance(item, ResponseOutputMessage):
-        assistant_text = item.content[0].text
-        send_ai_message(assistant_text)
-        if assistant_text and is_research:
-            st.download_button(
-                label="Download Report",
-                data=assistant_text,
-                file_name="research_report.txt",
-                mime="text/plain",
-            )
+    for item in response.output:
+        if isinstance(item, ResponseOutputMessage):
+            assistant_text = item.content[0].text
+            send_ai_message(assistant_text)
+            if assistant_text and is_research:
+                st.download_button(
+                    label="Download Report",
+                    data=assistant_text,
+                    file_name="research_report.txt",
+                    mime="text/plain",
+                )
                 
             
 
