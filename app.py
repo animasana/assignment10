@@ -14,8 +14,6 @@ from langchain_community.chat_message_histories import StreamlitChatMessageHisto
 
 history = StreamlitChatMessageHistory()
 
-if "final_report" not in st.session_state:
-    st.session_state.final_report = None
 
 with st.sidebar:
     OPEN_API_KEY = st.text_input(label="OPEN_API_KEY")
@@ -35,6 +33,7 @@ st.set_page_config(
     page_title="Assitant GPT",
     page_icon="🧠"
 )
+
 
 st.title("🧠 Assignment10 - AI Assistant")
 
@@ -291,6 +290,3 @@ if user_input:
                     file_name="research_report.txt",
                     mime="text/plain",
                 )
-                
-            
-
