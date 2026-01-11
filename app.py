@@ -235,7 +235,7 @@ if user_input:
                 else:
                     break
 
-                MAX_SCRAPES = 1
+                MAX_SCRAPES = 2
                 scrape_count = 0
                 allowed_calls = []
                 for call in tool_calls:                        
