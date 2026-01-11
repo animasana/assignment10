@@ -187,11 +187,6 @@ if user_input:
             input=messages,
         )
 
-        for item in response.output:
-            if isinstance(item, ResponseOutputMessage):
-                assistant_text = item.content[0].text
-                send_ai_message(assistant_text)
-                            
     else:
         with st.spinner("Waiting a response..."):
             SYSTEM_PROMPT = {
@@ -287,10 +282,11 @@ if user_input:
                     tools=tools,        
                 )
     
-            for item in response.output:
-                if isinstance(item, ResponseOutputMessage):
-                    assistant_text = item.content[0].text
-                    send_ai_message(assistant_text)                    
+        for item in response.output:
+            if isinstance(item, ResponseOutputMessage):
+                assistant_text = item.content[0].text
+                send_ai_message(assistant_text)
+                if assistant_text and is_research:
                     st.download_button(
                         label="Download Report",
                         data=assistant_text,
