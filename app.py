@@ -10,10 +10,12 @@ from langchain_community.tools import WikipediaQueryRun, DuckDuckGoSearchResults
 from langchain_community.utilities import WikipediaAPIWrapper
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.chat_message_histories import StreamlitChatMessageHistory
-from langchain_core.messages.base import BaseMessage
 
 
 history = StreamlitChatMessageHistory()
+
+if "final_report" not in st.session_state:
+    st.session_state.final_report = None
 
 with st.sidebar:
     OPEN_API_KEY = st.text_input(label="OPEN_API_KEY")
@@ -279,15 +281,21 @@ if user_input:
                     tools=tools,        
                 )
     
+    st.session_state.final_report = False
     for item in response.output:
         if isinstance(item, ResponseOutputMessage):
             assistant_text = item.content[0].text
             send_ai_message(assistant_text)
-            if assistant_text and is_research:                
+            if assistant_text and is_research:
+                st.session_state.final_report = True                
+
+            if st.session_state.final_report:    
                 st.download_button(
                     label="Download Report",
                     data=assistant_text,
                     file_name="research_report.txt",
                     mime="text/plain",
-                )   
+                )
+                
+            
 
