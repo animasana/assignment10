@@ -17,13 +17,17 @@ history = StreamlitChatMessageHistory()
 
 with st.sidebar:
     OPEN_API_KEY = st.text_input(label="OPEN_API_KEY")
+    
     model = st.selectbox(
         "Model",
         ["gpt-5-nano", "gpt-4o-mini"]
-    )    
-    clear = st.button("History Clear")
-    if clear:
-        history.clear()
+    )
+    
+    st.write("https://github.com/animasana/assignment10/blob/main/app.py")
+
+    if st.button("History Clear"):
+        history.clear()    
+
 
 st.set_page_config(
     page_title="Assitant GPT",
@@ -60,13 +64,6 @@ def scrape_website(inputs) -> str:
     docs = loader.load()
     text = "\n\n".join([doc.page_content for doc in docs])
     return text[:5000]    
-
-
-def save_research_to_txt(inputs) -> str:    
-    content = inputs["content"]
-    with open("research_report.txt", "w", encoding="utf-8") as f:
-        f.write(content)
-    return "Saved the report!!"
 
 
 tools = [
@@ -123,33 +120,14 @@ tools = [
             },
             "required": ["url"],
         },        
-    },
-    {
-        "type": "function",
-        "name": "save_research_to_txt",
-        "description": (
-            "After completing all research and synthesizing the findings into a "
-            "coherent report, you MUST call this function to save the final "
-        ),        
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "string",
-                    "description": "a research report about a query",
-                },
-            },
-            "required": ["content"],
-        },        
-    },
+    },    
 ]
 
 
 tool_map = {
     "wikipedia_search": wikipedia_search,
     "duckduckgo_search": duckduckgo_search,
-    "scrape_website": scrape_website,
-    "save_research_to_txt": save_research_to_txt,    
+    "scrape_website": scrape_website,        
 }
 
 
@@ -194,7 +172,8 @@ user_input = st.chat_input("Ask something...")
 if user_input:
     send_user_message(user_input)    
     response = None
-    if not user_input.lower().startswith("research"):
+    is_research = user_input.lower().startswith("research")
+    if not is_research:
         messages = build_messages_from_history()
         messages.append({
             "role": "user",
@@ -218,8 +197,8 @@ if user_input:
                     3. Use duckduckgo_search in DuckDuckGo.
                     4. If duckduckgo_search found a url, Scrape at most ONE website.
                     5. Do NOT repeat the same search query.
-                    6. After completing research, write a research report.
-                    7. You MUST call save_research_to_txt with the final report.
+                    6. After completing research, respond with the final report directly.
+                    7. Do NOT call any tool after the report.                    
                 """
             }
             response = openai.responses.create(
@@ -303,5 +282,12 @@ if user_input:
     for item in response.output:
         if isinstance(item, ResponseOutputMessage):
             assistant_text = item.content[0].text
-            send_ai_message(assistant_text)   
+            send_ai_message(assistant_text)
+            if assistant_text and is_research:                
+                st.download_button(
+                    label="Download Report",
+                    data=assistant_text,
+                    file_name="research_report.txt",
+                    mime="text/plain",
+                )   
 
