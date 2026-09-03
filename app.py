@@ -20,7 +20,7 @@ with st.sidebar:
     
     model = st.selectbox(
         "Model",
-        ["gpt-5-nano", "gpt-4o-mini"]
+        ["gpt-5.6-luna", "gpt-5.6-terra"]
     )
     
     st.write("https://github.com/animasana/assignment10/blob/main/app.py")
